@@ -34,7 +34,6 @@ else
 fi
 
 sudo usermod -aG docker $USER;
-newgrp docker;
 
 if [ ! -f /etc/wsl.conf ] || ! command sudo grep -qc "service docker start" "/etc/wsl.conf"; then
     echo "" | sudo tee -a /etc/wsl.conf;

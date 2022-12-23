@@ -1,13 +1,11 @@
 #!/bin/zsh
 
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k;
-
-if ! command grep -qc "source ~/powerlevel10k/powerlevel10k.zsh-theme" "$HOME/.zshrc"; then
-    echo "" >> ~/.zshrc;
-    echo "# powerlevel10k theme" >> ~/.zshrc;
-    echo "source ~/powerlevel10k/powerlevel10k.zsh-theme" >> ~/.zshrc;
+if [ -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
+    echo "powerlevel10k exists.  Pulling the latest.";
+    git -C "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" pull;
 else
-    echo "=> powerlevel10k.zsh-theme is already in ~/.zshrc"
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k;
 fi
 
-source ~/.zshrc;
+sed -i -e 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc;
+exec zsh;

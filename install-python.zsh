@@ -31,10 +31,11 @@ if ! command grep -qc 'export PYENV_ROOT="$HOME/.pyenv"' "$HOME/.zshrc"; then
     echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
     echo 'eval "$(pyenv init -)"' >> ~/.zshrc
     echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.zshrc
-    source ~/.zshrc;
 else
     echo "=> pyenv is already in ~/.zshrc"
 fi
+
+source ~/.zshrc;
 
 # Install latest version of python
 if [ "$(which python)" = "$PYENV_ROOT/shims/python" ]; then
@@ -48,16 +49,19 @@ fi
 # Install poetry
 curl -sSL https://install.python-poetry.org | python -;
 
-# Add autocompletion
-if [ ! -f "$HOME/.zfunc/_poetry" ]; then
-    echo "Installing autocompletion for poetry";
-    if [ ! -d "$HOME/.zfunc" ]; then
-        mkdir $HOME/.zfunc;
-    fi
-    poetry completions zsh > ~/.zfunc/_poetry;
+# Add poetry to the PATH
+if [[ :$PATH: == *:"$HOME/.local/bin":* ]] ; then
+    echo "$HOME/.local/bin is already on the path";
 else
-    echo "Automcompletion for poetry is already installed";
+    echo "" >> ~/.zshrc;
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc;
 fi
+
+source ~/.zshrc;
+
+# Add autocompletion
+mkdir -p ~/.zfunc;
+poetry completions zsh > ~/.zfunc/_poetry;
 
 # Load the autocompletion
 if ! command grep -qc "fpath+=~/.zfunc" "$HOME/.zshrc"; then
@@ -67,14 +71,6 @@ if ! command grep -qc "fpath+=~/.zfunc" "$HOME/.zshrc"; then
     echo "autoload -Uz compinit && compinit" >> ~/.zshrc;
 else
     echo "Autocompletion for poetry has already been added to ~/.zshrc";
-fi
-
-# Add poetry to the PATH
-if [[ :$PATH: == *:"$HOME/.local/bin":* ]] ; then
-    echo "$HOME/.local/bin is already on the path";
-else
-    echo "";
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc;
 fi
 
 source ~/.zshrc;
