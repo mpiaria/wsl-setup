@@ -31,7 +31,7 @@ if ! command sudo grep -qc "service docker start" "/etc/wsl.conf"; then
     echo "Adding docker service to wsl.conf";
     echo "" | sudo tee -a /etc/wsl.conf;
     echo "[boot]" | sudo tee -a /etc/wsl.conf;
-    echo "command=service docker start" | sudo tee -a /etc/wsl.conf;
+    echo "command = service docker start" | sudo tee -a /etc/wsl.conf;
 else
     echo "Docker service is already in wsl.conf";
 fi
