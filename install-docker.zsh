@@ -27,6 +27,15 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin;
 sudo update-alternatives --set iptables /usr/sbin/iptables-legacy;
 sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy;
 
+if ! grep -q "docker" /etc/group; then
+    sudo groupadd docker;
+else
+    echo "docker group already exists";
+fi
+
+sudo usermod -aG docker $USER;
+newgrp docker;
+
 if ! command sudo grep -qc "service docker start" "/etc/wsl.conf"; then
     echo "" | sudo tee -a /etc/wsl.conf;
     echo "[boot]" | sudo tee -a /etc/wsl.conf;
