@@ -28,7 +28,6 @@ sudo update-alternatives --set iptables /usr/sbin/iptables-legacy;
 sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy;
 
 if ! command sudo grep -qc "service docker start" "/etc/wsl.conf"; then
-    echo "Adding docker service to wsl.conf";
     echo "" | sudo tee -a /etc/wsl.conf;
     echo "[boot]" | sudo tee -a /etc/wsl.conf;
     echo "command = service docker start" | sudo tee -a /etc/wsl.conf;
