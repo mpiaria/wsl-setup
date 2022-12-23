@@ -36,7 +36,7 @@ fi
 sudo usermod -aG docker $USER;
 newgrp docker;
 
-if ! command sudo grep -qc "service docker start" "/etc/wsl.conf"; then
+if [ ! -f /etc/wsl.conf ] || ! command sudo grep -qc "service docker start" "/etc/wsl.conf"; then
     echo "" | sudo tee -a /etc/wsl.conf;
     echo "[boot]" | sudo tee -a /etc/wsl.conf;
     echo "command = service docker start" | sudo tee -a /etc/wsl.conf;
@@ -44,4 +44,5 @@ else
     echo "Docker service is already in wsl.conf";
 fi
 
+sudo service docker start;
 sudo apt install -y docker-compose;
